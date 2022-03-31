@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML-Only Disclosure</title>
+
+	<style type="text/css">
+		body {
+			margin: 1em auto;
+			max-width: 30em;
+			width: 88%;
+		}
+
+		details {
+			margin-bottom: 2em;
+		}
+
+		details[open] {
+			background-color: #f7f7f7;
+			padding: 0.5em;
+		}
+
+		summary {
+			margin-bottom: 0.5em;
+		}
+
+		/**
+		 * 1. Styling for Firefox and other non-webkit/blink browsers
+		 * 2. Styling for webkit and blink
+		 */
+		summary::marker, /* 1 */
+		summary::-webkit-details-marker { /* 2 */
+			display: none;
+			content: "+ ";
+		}
+
+		[open] > summary::marker, /* 1 */
+		[open] > summary::-webkit-details-marker { /* 2 */
+			display: none;
+			content: "– ";
+		}
+	</style>
+</head>
+<body>
+
+	<h1>HTML-Only Disclosure</h1>
+
+	<details>
+		<summary>The toggle</summary>
+		The content.
+	</details>
+
+	<details open>
+		<summary>Another toggle</summary>
+		Expanded by default.
+	</details>
+
+
+	<script>
+		// Listen for open/close events
+		// Requires use capture when paired with event delegation
+		document.addEventListener('toggle', function (event) {
+
+			// The disclosure that was toggled
+			let disclosure = event.target;
+			console.log(disclosure);
+
+		}, true);
+	</script>
+</body>
+</html>

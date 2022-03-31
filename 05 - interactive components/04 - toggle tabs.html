@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Toggle Tabs</title>
+
+	<style type="text/css">
+		body {
+			margin: 1em auto;
+			max-width: 30em;
+			width: 88%;
+		}
+
+		[role="tablist"] {
+			list-style: none;
+			margin: 0 0 2em;
+			padding: 0;
+		}
+
+		[role="tablist"] li {
+			display: inline-block;
+		}
+
+		[role="tab"] {
+			border: 1px solid #808080;
+			color: #272727;
+			margin-right: 0.25em;
+			padding:  0.5em 1em;
+			text-decoration: none;
+		}
+
+		[role="tab"]:active,
+		[role="tab"]:hover {
+			background-color: #e5e5e5;
+		}
+
+		[role="tab"][aria-selected="true"] {
+			background-color: #0088cc;
+			border-color: #0088cc;
+			color: #ffffff;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Toggle Tabs</h1>
+
+	<ul data-tabs>
+		<li><a href="#wizard">Wizard</a></li>
+		<li><a href="#sorcerer">Sorcerer</a></li>
+		<li><a href="#druid">Druid</a></li>
+	</ul>
+
+
+	<div id="wizard">
+		<h2>Wizard</h2>
+
+		<p><strong>Fun Facts:</strong></p>
+		<ol>
+			<li>Gain their magic through study</li>
+			<li>Typically know a wide range of spells</li>
+			<li>Specialize in a particular school of magic</li>
+		</ol>
+		<p><a href="https://www.dndbeyond.com/classes/wizard">More about wizards &rarr;</a></p>
+	</div>
+
+	<div id="sorcerer">
+		<h2>Sorcerer</h2>
+
+		<p><strong>Fun Facts:</strong></p>
+		<ol>
+			<li>Get their power from an otherworldly being</li>
+			<li>Typically know a limited selection of spells</li>
+			<li>Often have a pet or familiar</li>
+		</ol>
+		<p><a href="https://www.dndbeyond.com/classes/sorcerer">More about sorcerers &rarr;</a></p>
+	</div>
+
+	<div id="druid">
+		<h2>Druid</h2>
+
+		<p><strong>Fun Facts:</strong></p>
+		<ol>
+			<li>Get their power from nature</li>
+			<li>Know how to control the elements in various ways</li>
+			<li>Typically aim to keep balance between nature and humanity</li>
+		</ol>
+		<p><a href="https://www.dndbeyond.com/classes/druid">More about druids &rarr;</a></p>
+	</div>
+
+
+	<script>
+		/**
+		 * Add ARIA attributes and hide content on page load
+		 */
+		function setupDOM () {
+
+			// Get the [data-tabs] element
+			let tabList = document.querySelector('[data-tabs]');
+			if (!tabList) return;
+
+			// Get the list items and links
+			let tabs = tabList.querySelectorAll('li');
+			let links = tabList.querySelectorAll('a');
+
+			// Add ARIA to list
+			tabList.setAttribute('role', 'tablist');
+
+			// Add ARIA to the list items
+			for (let tab of tabs) {
+				tab.setAttribute('role', 'presentation');
+			}
+
+			// Add ARIA to the links and content
+			links.forEach(function (link, index) {
+
+				// Get the the target element
+				let tabPane = document.querySelector(link.hash);
+				if (!tabPane) return;
+
+				// Add [role], [aria-controls], and [aria-selected] attributes
+				link.setAttribute('role', 'tab');
+				link.setAttribute('aria-controls', tabPane.id);
+				link.setAttribute('aria-selected', index === 0 ? true : false);
+
+				// If it's not the active (first) tab, remove focus
+				if (index > 0) {
+					link.setAttribute('tabindex', -1);
+				}
+
+				// If there's no ID, add one
+				if (!link.id) {
+					link.id = `tab_${tabPane.id}`;
+				}
+
+				// Add ARIA to tab pane
+				tabPane.setAttribute('role', 'tabpanel');
+				tabPane.setAttribute('aria-labelledby', link.id);
+
+				// If not the active pane, hide it
+				if (index > 0) {
+					tabPane.setAttribute('hidden', '');
+				}
+
+			});
+
+		}
+
+		/**
+		 * Toggle tab visibility
+		 * @param  {Node} tab The tab to show
+		 */
+		function toggleTab (tab) {
+
+			// Get the target tab pane
+			let tabPane = document.querySelector(tab.hash);
+			if (!tabPane) return;
+
+			// Get the current tab and content
+			let currentTab = tab.closest('[role="tablist"]').querySelector('[aria-selected="true"]');
+			let currentPane = document.querySelector(currentTab.hash);
+
+			// Update the selected tab
+			tab.setAttribute('aria-selected', true);
+			currentTab.setAttribute('aria-selected', false);
+
+			// Update the visible tabPane
+			tabPane.removeAttribute('hidden');
+			currentPane.setAttribute('hidden', '');
+
+			// Make sure current tab can be focused and other tabs cannot
+			tab.removeAttribute('tabindex');
+			currentTab.setAttribute('tabindex', -1);
+
+		}
+
+		/**
+		 * Show content on click events
+		 * @param  {Event} event The event object
+		 */
+		function clickHandler (event) {
+
+			// Only run on tab links
+			if (!event.target.matches('[role="tab"]')) return;
+
+			// Prevent the link from updating the URL
+			event.preventDefault();
+
+			// Ignore the currently active tab
+			if (event.target.matches('[aria-selected="true"]')) return;
+
+			// Toggle tab visibility
+			toggleTab(event.target);
+
+		}
+
+		/**
+		 * Update tab content on keyboard events
+		 * @param  {Event} event The event object
+		 */
+		function keyHandler (event) {
+
+			// Only run for left and right arrow keys
+			if (!['ArrowLeft', 'ArrowRight'].includes(event.code)) return;
+
+			// Only run if element in focus is on a tab
+			let tab = document.activeElement.closest('[role="tab"]');
+			if (!tab) return;
+
+			// Get the currently active tab
+			let currentTab = tab.closest('[role="tablist"]').querySelector('[role="tab"][aria-selected="true"]');
+
+			// Get the parent list item
+			let listItem = currentTab.closest('li');
+
+			// If right arrow, get the next sibling
+			// Otherwise, get the previous
+			let nextListItem = event.code === 'ArrowRight' ? listItem.nextElementSibling : listItem.previousElementSibling;
+			if (!nextListItem) return;
+			let nextTab = nextListItem.querySelector('a');
+
+			// Toggle tab visibility
+			toggleTab(nextTab);
+			nextTab.focus();
+
+		}
+
+		// Initialize the script
+		setupDOM();
+		document.addEventListener('click', clickHandler);
+		document.addEventListener('keydown', keyHandler);
+	</script>
+</body>
+</html>

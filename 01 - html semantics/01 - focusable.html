@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Focusable Elements</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+
+			.btn {
+				background-color: #e5e5e5;
+				border: 1px solid #808080;
+				border-radius: 0.25em;
+				color: #272727;
+				font: inherit;
+				margin-right: 0.5em;
+				padding: 0.5em 0.85em;
+				text-decoration: none;
+			}
+
+			.btn:hover {
+				background-color: #0088cc;
+				border-color: #0088cc;
+				color: #ffffff;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<h1>Focusable Elements</h1>
+
+		<button class="btn">Click me</button>
+		<span class="btn">Click me, too</span>
+		<button class="btn">Don't forget me!</button>
+
+
+		<script>
+			document.addEventListener('click', function (event) {
+
+				// Only run on .btn elements
+				if (!event.target.matches('.btn')) return;
+
+				// Run some code
+				console.log('I was clicked', event.target);
+
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Hiding content with attributes and properties</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+
+			.bg {
+				background: #f7f7f7;
+				border: 1px solid #e5e5e5;
+				padding: 1em;
+			}
+
+			.top-secret {
+				display: hidden;
+			}
+
+			.invisible {
+				visibility: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<h1>Hiding content with attributes and properties</h1>
+
+		<div class="bg">
+			<div hidden>
+				Nothing inside this element will be displayed in the UI.
+				It also won't be read aloud by screen readers.
+			</div>
+		</div>
+
+
+
+		<div class="bg">
+			<div class="top-secret">
+				Nothing inside this element will be displayed in the UI or read aloud, either.
+			</div>
+		</div>
+
+
+
+		<div class="bg">
+			<div class="invisible">
+				Nothing inside this element will be displayed in the UI, but it still affects the layout and gets read by screen readers.
+			</div>
+		</div>
+	</body>
+</html>

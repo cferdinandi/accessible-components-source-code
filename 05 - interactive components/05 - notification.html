@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Notification</title>
+
+	<style type="text/css">
+		body {
+			margin: 1em auto;
+			max-width: 30em;
+			width: 88%;
+		}
+
+		.notification {
+			background-color: #f7f7f7;
+			border: 1px solid #e5e5e5;
+			margin:  0 0 0.5em;
+			padding: 0.5em 1em;
+		}
+
+		.notification-close {
+			background: transparent;
+			border: none;
+			color: inherit;
+			font: inherit;
+			float: right;
+			margin: 0 0 0.5em 0.5em;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Notification</h1>
+
+	<div id="notification"></div>
+
+	<script>
+		function notify (selector, message, autohide, dismiss) {
+
+			// Get the target element
+			let target = document.querySelector(selector);
+			if (!target || !message) return;
+
+			// Create the notification element
+			let notification = document.createElement('div');
+			notification.className = 'notification';
+			notification.setAttribute('role', 'alert');
+
+			// Show dismiss icon
+			if (dismiss) {
+				notification.innerHTML = '<button class="notification-close" aria-label="Close">&#x2715</button>';
+				notification.addEventListener('click', function close (event) {
+					if (!event.target.matches('.notification-close')) return;
+					notification.remove();
+					notification.removeEventListener('click', close);
+				});
+			}
+
+			// Append into the DOM
+			target.append(notification);
+
+			// Add message
+			setTimeout(function () {
+				notification.innerHTML += message;
+			}, 1);
+
+			// If autohide, remove after 5 seconds
+			if (autohide) {
+				setTimeout(function () {
+					notification.remove();
+				}, 5000);
+			}
+
+		}
+	</script>
+</body>
+</html>

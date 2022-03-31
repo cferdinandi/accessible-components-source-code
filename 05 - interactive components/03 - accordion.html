@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Accordion</title>
+
+	<style type="text/css">
+		body {
+			margin: 1em auto;
+			max-width: 30em;
+			width: 88%;
+		}
+
+		/**
+		 * Style the accordion buttons to look like headers
+		 */
+		[data-accordion] > button {
+			background: transparent;
+			border: none;
+			display: block;
+			font: inherit;
+			margin: 0;
+			padding: 0;
+			text-align: left;
+			width: 100%;
+		}
+
+		/**
+		 * Show expand/collapse icons
+		 */
+		[data-accordion] > button[aria-expanded="true"]::after {
+			content: " –";
+		}
+
+		[data-accordion] > button[aria-expanded="false"]::after {
+			content: " +";
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Accordion</h1>
+
+	<h2 data-accordion="#yo-ho-ho">Yo, ho ho!</h2>
+	<div id="yo-ho-ho">Yo, ho ho and a bottle of rum!</div>
+
+	<h2 data-accordion="#ahoy-there">Ahoy, there!</h2>
+	<div id="ahoy-there">Ahoy there, matey!</div>
+
+
+	<script>
+		/**
+		 * Add buttons and hide content on page load
+		 */
+		function setupDOM () {
+
+			// Get all accordion headings
+			let headings = document.querySelectorAll('[data-accordion]');
+
+			// Wrap content in a button
+			for (let heading of headings) {
+
+				// Get the matching content
+				// If there isn't any, skip
+				let content = document.querySelector(heading.getAttribute('data-accordion'));
+				if (!content) continue;
+
+				// Create a button, and copy heading content into it
+				let btn = document.createElement('button');
+				btn.innerHTML = heading.innerHTML;
+
+				// Wipe the heading content, and replace it with the button
+				heading.innerHTML = '';
+				heading.append(btn);
+
+				// Hide the content
+				content.setAttribute('hidden', '');
+
+				// Add ARIA
+				btn.setAttribute('aria-expanded', false);
+				btn.setAttribute('aria-controls', content.id);
+
+			}
+
+		}
+
+		/**
+		 * Show or hide content on click events
+		 * @param  {Event} event The event object
+		 */
+		function clickHandler (event) {
+
+			// Only run on accordion buttons
+			let accordion = event.target.closest('[data-accordion]');
+			if (!accordion) return;
+
+			// Get the content associated with the accordion
+			let content = document.querySelector(accordion.getAttribute('data-accordion'));
+			if (!content) return;
+
+			// If the content is expanded, hide it
+			// Otherwise, show it
+			if (event.target.getAttribute('aria-expanded') === 'true') {
+				event.target.setAttribute('aria-expanded', false);
+				content.setAttribute('hidden', '');
+			} else {
+				event.target.setAttribute('aria-expanded', true);
+				content.removeAttribute('hidden');
+			}
+
+		}
+
+		// Initialize the script
+		setupDOM();
+		document.addEventListener('click', clickHandler);
+	</script>
+</body>
+</html>

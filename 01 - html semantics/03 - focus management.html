@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Focus Management</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+
+			.btn {
+				background-color: #e5e5e5;
+				border: 1px solid #808080;
+				border-radius: 0.25em;
+				color: #272727;
+				font: inherit;
+				margin-right: 0.5em;
+				padding: 0.5em 0.85em;
+				text-decoration: none;
+			}
+
+			.btn:hover {
+				background-color: #0088cc;
+				border-color: #0088cc;
+				color: #ffffff;
+			}
+
+			p {
+				margin:  0 0 2em;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<h1>Focus Management</h1>
+
+		<!-- Default Focus Order -->
+		<p>
+			<button>This will focus first</button>
+			<button>Then this will</button>
+			<button>Finally, this will focus last</button>
+		</p>
+
+
+		<!--
+			Modified Focus Order
+			Don't do this!
+		-->
+		<p>
+			<button tabindex="3">This will focus last</button>
+			<button tabindex="1">This will focus first</button>
+			<button tabindex="2">This will focus second</button>
+		</p>
+
+
+
+		<!-- There are edge-case exceptions -->
+		<button tabindex="-1">This will be skipped in the focus order</button>
+		<div id="app" tabindex="-1">This isn't a focusable element, but can now be focused with JavaScript.</div>
+
+
+		<script>
+			// This shifts focus to the div#app element event though it's not focusable by default
+			let app = document.querySelector('#app');
+			app.focus();
+		</script>
+	</body>
+</html>

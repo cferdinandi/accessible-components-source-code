@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+		<title>Buttons vs. Links</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<style type="text/css">
+			body {
+				margin: 0 auto;
+				max-width: 40em;
+				width: 88%;
+			}
+
+			.btn {
+				background-color: #e5e5e5;
+				border: 1px solid #808080;
+				border-radius: 0.25em;
+				color: #272727;
+				font: inherit;
+				margin-right: 0.5em;
+				padding: 0.5em 0.85em;
+				text-decoration: none;
+			}
+
+			.btn:hover {
+				background-color: #0088cc;
+				border-color: #0088cc;
+				color: #ffffff;
+			}
+
+			p {
+				margin:  0 0 2em;
+			}
+		</style>
+	</head>
+
+	<body>
+
+		<h1>Buttons vs. Links</h1>
+
+		<!-- Avoid this -->
+		<p><a class="btn" href="#">Click Me</a></p>
+
+
+
+		<!-- This is a link. It takes you somewhere. -->
+		<p><a href="merlin.html">Learn about Merlin</a></p>
+
+		<!-- This is a button. It adds interactivity to the current page. -->
+		<p><button class="btn" id="cast">Cast a Spell</button></p>
+
+
+		<!-- This gets progressively enhanced into a button after page load -->
+		<p><a id="js-async" href="merlin.html">Learn more about Merlin</a></p>
+
+
+		<script>
+			// Cast a spell
+			let cast = document.querySelector('#cast');
+			cast.addEventListener('click', function () {
+				console.log('Abracadabra!');
+			});
+
+
+
+			// Progressively enhance a link button
+			let link = document.querySelector('#js-async');
+			link.setAttribute('role', 'button');
+
+			// Do some JS stuff when the button is clicked
+			// ...
+		</script>
+	</body>
+</html>

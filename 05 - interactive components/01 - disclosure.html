@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Disclosure</title>
+
+	<style type="text/css">
+		body {
+			margin: 1em auto;
+			max-width: 30em;
+			width: 88%;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Disclosure</h1>
+
+	<p>
+		<button data-disclosure="#content" hidden>Show More</button>
+	</p>
+
+	<div id="content">
+		<p>Now you see me, now you don't!</p>
+	</div>
+
+
+	<script>
+		/**
+		 * Show buttons and hide content on page load
+		 */
+		function setupDOM () {
+
+			// Get all disclosure buttons
+			let disclosures = document.querySelectorAll('[data-disclosure]');
+
+			// Loop through each disclosure
+			for (let disclosure of disclosures) {
+
+				// Get the associated content
+				// If there isn't any, bail
+				let content = document.querySelector(disclosure.getAttribute('data-disclosure'));
+				if (!content) continue;
+
+				// Show the button, hide the content
+				disclosure.removeAttribute('hidden');
+				content.setAttribute('hidden', '');
+
+				// Add ARIA
+				disclosure.setAttribute('aria-expanded', false);
+				disclosure.setAttribute('aria-controls', content.id);
+
+			}
+		}
+
+		/**
+		 * Show or hide content on click events
+		 * @param  {Event} event The event object
+		 */
+		function clickHandler (event) {
+
+			// Only run on disclosure buttons
+			let target = event.target.getAttribute('data-disclosure');
+			if (!target) return;
+
+			// Get the content associated with the disclosure
+			let content = document.querySelector(target);
+			if (!content) return;
+
+			// If the content is expanded, hide it
+			// Otherwise, show it
+			if (event.target.getAttribute('aria-expanded') === 'true') {
+				event.target.setAttribute('aria-expanded', false);
+				content.setAttribute('hidden', '');
+			} else {
+				event.target.setAttribute('aria-expanded', true);
+				content.removeAttribute('hidden');
+			}
+
+		}
+
+		// Initialize the script
+		setupDOM();
+		document.addEventListener('click', clickHandler);
+	</script>
+</body>
+</html>

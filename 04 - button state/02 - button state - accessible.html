@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Button State - Accessible</title>
+
+	<style type="text/css">
+		body {
+			margin: 1em auto;
+			max-width: 30em;
+			width: 88%;
+		}
+
+		.fave {
+			background: transparent;
+			border: 0;
+			font-size: 2em;
+		}
+
+		.fave[aria-pressed="true"] {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+
+	<h1>Button State - Accessible</h1>
+
+	<button class="fave" aria-label="Favorite" aria-pressed="false">❤</button>
+	<button class="fave" aria-label="Favorite" aria-pressed="true">❤</button>
+
+</body>
+</html>
