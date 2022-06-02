@@ -41,7 +41,7 @@
 		<h1>Buttons vs. Links</h1>
 
 		<!-- Avoid this -->
-		<p><a class="btn" href="#">Click Me</a></p>
+		<p><a class="btn" href="#">Activate Me</a></p>
 
 
 
@@ -69,8 +69,35 @@
 			let link = document.querySelector('#js-async');
 			link.setAttribute('role', 'button');
 
+			// Fire click events when space bar is pressed on a link with [role="button"]
+			document.addEventListener('keyup', function (event) {
+
+				// Only run when Space bar is pressed and active element has [role="button"] attribute
+				if (event.code !== 'Space' || !document.activeElement.matches('a[role="button"]')) return;
+
+				// Fire click event on active element
+				let click = new MouseEvent('click', {
+					bubbles: true,
+					cancelable: true,
+					view: window
+				});
+
+				// Dispatch event
+				document.activeElement.dispatchEvent(click);
+
+			});
+
 			// Do some JS stuff when the button is clicked
-			// ...
+			let jsAsync = document.querySelector('#js-async');
+			jsAsync.addEventListener('click', function (event) {
+
+				// Stop the link from reloading the page
+				event.preventDefault();
+
+				console.log('#js-async activated');
+				// ...
+
+			});
 		</script>
 	</body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Toggle Tabs</title>
+	<title>Tabs</title>
 
 	<style type="text/css">
 		body {
@@ -42,7 +42,7 @@
 </head>
 <body>
 
-	<h1>Toggle Tabs</h1>
+	<h1>Tabs</h1>
 
 	<ul data-tabs>
 		<li><a href="#wizard">Wizard</a></li>
@@ -99,15 +99,15 @@
 			if (!tabList) return;
 
 			// Get the list items and links
-			let tabs = tabList.querySelectorAll('li');
+			let listItems = tabList.querySelectorAll('li');
 			let links = tabList.querySelectorAll('a');
 
 			// Add ARIA to list
 			tabList.setAttribute('role', 'tablist');
 
 			// Add ARIA to the list items
-			for (let tab of tabs) {
-				tab.setAttribute('role', 'presentation');
+			for (let item of listItems) {
+				item.setAttribute('role', 'presentation');
 			}
 
 			// Add ARIA to the links and content
@@ -117,9 +117,8 @@
 				let tabPane = document.querySelector(link.hash);
 				if (!tabPane) return;
 
-				// Add [role], [aria-controls], and [aria-selected] attributes
+				// Add [role] and [aria-selected] attributes
 				link.setAttribute('role', 'tab');
-				link.setAttribute('aria-controls', tabPane.id);
 				link.setAttribute('aria-selected', index === 0 ? true : false);
 
 				// If it's not the active (first) tab, remove focus
